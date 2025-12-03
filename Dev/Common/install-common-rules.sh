@@ -241,7 +241,7 @@ copy_file() {
     # Vérifier si le fichier source existe
     if [[ ! -f "$src" ]]; then
         log_error "Fichier source introuvable: $src"
-        ((errors++))
+        ((++errors))
         return 1
     fi
 
@@ -259,7 +259,7 @@ copy_file() {
     if [[ -f "$dest" ]]; then
         if [[ "$action" == "install" ]] && ! $force; then
             log_warning "Fichier existant (skip): $relative_dest"
-            ((files_skipped++))
+            ((++files_skipped))
             return 0
         fi
 
@@ -274,7 +274,7 @@ copy_file() {
             cp "$src" "$dest"
             log_info "Mis à jour: $relative_dest"
         fi
-        ((files_updated++))
+        ((++files_updated))
     else
         if $dry_run; then
             log_dry_run "Création: $relative_dest"
@@ -282,7 +282,7 @@ copy_file() {
             cp "$src" "$dest"
             log_success "Créé: $relative_dest"
         fi
-        ((files_created++))
+        ((++files_created))
     fi
 }
 
@@ -293,7 +293,7 @@ copy_directory() {
 
     if [[ ! -d "$src_dir" ]]; then
         log_error "Répertoire source introuvable: $src_dir"
-        ((errors++))
+        ((++errors))
         return 1
     fi
 

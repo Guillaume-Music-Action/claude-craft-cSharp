@@ -113,13 +113,13 @@ For complex projects with multiple modules, use YAML configuration.
 #### 1. Create Configuration File
 
 ```bash
-cp Dev/claude-projects.yaml.example Dev/claude-projects.yaml
+cp claude-projects.yaml.example claude-projects.yaml
 ```
 
 #### 2. Edit Configuration
 
 ```yaml
-# Dev/claude-projects.yaml
+# claude-projects.yaml
 projects:
   - name: "my-monorepo"
     description: "My fullstack application"
@@ -137,26 +137,26 @@ projects:
 #### 3. Validate Configuration
 
 ```bash
-make config-validate CONFIG=Dev/claude-projects.yaml
+make config-validate
 ```
 
 #### 4. Install
 
 ```bash
 # Install a specific project
-make config-install PROJECT=my-monorepo CONFIG=Dev/claude-projects.yaml
+make config-install PROJECT=my-monorepo
 
 # Install all projects in config
-make config-install-all CONFIG=Dev/claude-projects.yaml
+make config-install-all
 
 # Dry run
-make config-dry-run PROJECT=my-monorepo CONFIG=Dev/claude-projects.yaml
+make config-dry-run PROJECT=my-monorepo
 ```
 
 #### 5. List Projects
 
 ```bash
-make config-list CONFIG=Dev/claude-projects.yaml
+make config-list
 ```
 
 ### Method 3: Direct Script Execution

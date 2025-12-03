@@ -71,8 +71,7 @@ claude-craft/
 │   ├── Python/                 # Backend/API
 │   ├── React/                  # Frontend JS/TS
 │   ├── ReactNative/            # Mobile JS/TS
-│   ├── install-from-config.sh  # YAML-based installation
-│   └── claude-projects.yaml.example
+│   └── install-from-config.sh  # YAML-based installation
 ├── Project/                    # Project management
 └── Tools/                      # Claude Code utilities
     ├── MultiAccount/           # Multi-account manager

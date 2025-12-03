@@ -77,7 +77,6 @@ select_config_file() {
     # Cherche les fichiers existants
     [[ -f "$DEFAULT_CONFIG" ]] && configs+=("$DEFAULT_CONFIG")
     [[ -f "./claude-projects.yaml" ]] && configs+=("./claude-projects.yaml")
-    [[ -f "./Dev/claude-projects.yaml" ]] && configs+=("./Dev/claude-projects.yaml")
 
     if [[ ${#configs[@]} -gt 0 ]]; then
         echo "Fichiers trouvés:"
@@ -630,8 +629,6 @@ done
 if [[ -z "$CONFIG_FILE" ]]; then
     if [[ -f "./claude-projects.yaml" ]]; then
         CONFIG_FILE="./claude-projects.yaml"
-    elif [[ -f "./Dev/claude-projects.yaml" ]]; then
-        CONFIG_FILE="./Dev/claude-projects.yaml"
     else
         CONFIG_FILE="$DEFAULT_CONFIG"
     fi

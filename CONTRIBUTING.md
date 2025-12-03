@@ -38,8 +38,7 @@ claude-craft/
 │   │   ├── templates/          # Code templates
 │   │   ├── checklists/         # Quality checklists
 │   │   └── install-{tech}-rules.sh
-│   ├── install-from-config.sh  # YAML installer
-│   └── claude-projects.yaml.example
+│   └── install-from-config.sh  # YAML installer
 ├── Project/                    # Project management
 ├── Makefile                    # Orchestration
 └── docs/                       # Documentation

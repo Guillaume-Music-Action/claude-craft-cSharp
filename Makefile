@@ -23,7 +23,7 @@ SCRIPTS_DIR := $(shell pwd)/Dev
 TOOLS_DIR := $(shell pwd)/Tools
 TARGET ?= .
 OPTIONS ?=
-CONFIG ?= $(SCRIPTS_DIR)/claude-projects.yaml
+CONFIG ?= $(shell pwd)/claude-projects.yaml
 PROJECT ?=
 
 # Couleurs
@@ -53,7 +53,7 @@ help: ## Affiche cette aide
 	@echo "$(YELLOW)Variables:$(NC)"
 	@echo "  $(GREEN)TARGET$(NC)   Chemin vers le projet cible (défaut: .)"
 	@echo "  $(GREEN)OPTIONS$(NC)  Options supplémentaires pour les scripts"
-	@echo "  $(GREEN)CONFIG$(NC)   Fichier de configuration YAML (défaut: Dev/claude-projects.yaml)"
+	@echo "  $(GREEN)CONFIG$(NC)   Fichier de configuration YAML (défaut: claude-projects.yaml)"
 	@echo "  $(GREEN)PROJECT$(NC)  Nom du projet pour config-install"
 	@echo ""
 	@echo "$(YELLOW)Options disponibles:$(NC)"
