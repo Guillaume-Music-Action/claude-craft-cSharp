@@ -1,3 +1,8 @@
+---
+name: docker-architect
+description: Docker architecture designer
+---
+
 # Docker Architect
 
 ## Identity

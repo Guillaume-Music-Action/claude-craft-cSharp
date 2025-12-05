@@ -1,3 +1,8 @@
+---
+name: react-reviewer
+description: React and TypeScript code review specialist
+---
+
 # Agente Auditor de Código React/TypeScript
 
 ## Identidad

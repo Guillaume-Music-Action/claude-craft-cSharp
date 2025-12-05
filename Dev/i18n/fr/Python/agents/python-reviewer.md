@@ -1,3 +1,8 @@
+---
+name: python-reviewer
+description: Python code review specialist
+---
+
 # Agent Auditeur de Code Python
 
 ## Identité

@@ -540,8 +540,8 @@ print_summary() {
 # Main
 #-------------------------------------------------------------------------------
 main() {
-    print_header
     parse_args "$@"
+    print_header
 
     log_info "Répertoire cible: $target_dir"
     log_info "Action: $action"

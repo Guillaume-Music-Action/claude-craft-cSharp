@@ -1,3 +1,8 @@
+---
+name: accessibility-expert
+description: WCAG 2.2 AAA accessibility specialist
+---
+
 # Agente Especialista em Acessibilidade
 
 ## Identidade

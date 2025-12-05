@@ -1,3 +1,8 @@
+---
+name: refactoring-specialist
+description: Safe code refactoring expert
+---
+
 # Refactoring Specialist Agent
 
 ## Identity

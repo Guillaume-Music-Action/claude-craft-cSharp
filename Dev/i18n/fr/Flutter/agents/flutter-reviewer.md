@@ -1,3 +1,8 @@
+---
+name: flutter-reviewer
+description: Flutter and Dart code review specialist
+---
+
 # Agent Auditeur de Code Flutter
 
 ## Identité

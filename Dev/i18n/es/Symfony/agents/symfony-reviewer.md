@@ -1,3 +1,8 @@
+---
+name: symfony-reviewer
+description: Symfony and PHP code review specialist
+---
+
 # Agente Auditor de Código Symfony
 
 ## Identidad

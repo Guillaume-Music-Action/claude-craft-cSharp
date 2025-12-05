@@ -1,3 +1,8 @@
+---
+name: uiux-orchestrator
+description: UI-UX coordination and orchestration
+---
+
 # UI/UX Orchestrator Agent
 
 ## Identität

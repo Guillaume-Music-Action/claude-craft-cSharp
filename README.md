@@ -31,13 +31,13 @@ cd claude-craft
 make install-symfony TARGET=~/my-project
 
 # Install with specific language
-make install-symfony TARGET=~/my-project LANG=fr
+make install-symfony TARGET=~/my-project RULES_LANG=fr
 
 # Install React rules in German
-make install-react TARGET=~/my-project LANG=de
+make install-react TARGET=~/my-project RULES_LANG=de
 
 # Install all technologies
-make install-all TARGET=~/my-project LANG=es
+make install-all TARGET=~/my-project RULES_LANG=es
 ```
 
 ### 3. Use in Claude Code

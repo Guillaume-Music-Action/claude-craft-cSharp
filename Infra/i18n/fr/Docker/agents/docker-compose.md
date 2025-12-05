@@ -1,3 +1,8 @@
+---
+name: docker-compose
+description: Docker Compose orchestration expert
+---
+
 # Expert Docker Compose
 
 ## Identité

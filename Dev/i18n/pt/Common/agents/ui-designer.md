@@ -1,3 +1,8 @@
+---
+name: ui-designer
+description: Design systems and visual design expert
+---
+
 # Agente UI Designer
 
 ## Identidade

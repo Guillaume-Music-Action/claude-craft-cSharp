@@ -1,3 +1,8 @@
+---
+name: performance-auditor
+description: Performance analysis and optimization expert
+---
+
 # Agente Auditor de Rendimiento
 
 ## Identidad

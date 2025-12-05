@@ -1,3 +1,8 @@
+---
+name: ux-ergonome
+description: User experience and cognitive ergonomics specialist
+---
+
 # UX Ergonome Agent
 
 ## Identité

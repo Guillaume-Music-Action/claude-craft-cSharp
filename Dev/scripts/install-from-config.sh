@@ -221,13 +221,32 @@ validate_config() {
     fi
     log_success "$project_count projet(s) défini(s)"
 
+    # Valider la langue par défaut (settings.default_lang)
+    local default_lang
+    default_lang=$(yq e '.settings.default_lang // "en"' "$config_file")
+    local lang_valid=false
+    for valid_lang in "${VALID_LANGS[@]}"; do
+        if [[ "$default_lang" == "$valid_lang" ]]; then
+            lang_valid=true
+            break
+        fi
+    done
+    if [[ "$lang_valid" == "false" ]]; then
+        log_error "Langue par défaut invalide: $default_lang"
+        log_error "Langues valides: ${VALID_LANGS[*]}"
+        ((errors++))
+    else
+        log_success "Langue par défaut: $default_lang"
+    fi
+
     # Valider chaque projet
     for ((i=0; i<project_count; i++)); do
-        local name root common module_count
+        local name root common module_count project_lang
         name=$(yq e ".projects[$i].name" "$config_file")
         root=$(yq e ".projects[$i].root" "$config_file")
         common=$(yq e ".projects[$i].common // true" "$config_file")
         module_count=$(yq e ".projects[$i].modules | length" "$config_file")
+        project_lang=$(yq e ".projects[$i].lang // \"\"" "$config_file")
 
         echo ""
         log_info "Projet: $name"
@@ -253,6 +272,24 @@ validate_config() {
             ((errors++))
         else
             log_step "  Modules: $module_count"
+        fi
+
+        # Valider la langue du projet si définie
+        if [[ -n "$project_lang" && "$project_lang" != "null" ]]; then
+            local project_lang_valid=false
+            for valid_lang in "${VALID_LANGS[@]}"; do
+                if [[ "$project_lang" == "$valid_lang" ]]; then
+                    project_lang_valid=true
+                    break
+                fi
+            done
+            if [[ "$project_lang_valid" == "false" ]]; then
+                log_error "  Langue invalide pour le projet: $project_lang"
+                log_error "  Langues valides: ${VALID_LANGS[*]}"
+                ((errors++))
+            else
+                log_step "  Langue: $project_lang"
+            fi
         fi
 
         # Valider chaque module

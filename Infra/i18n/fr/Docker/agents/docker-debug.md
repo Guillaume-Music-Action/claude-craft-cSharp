@@ -1,3 +1,8 @@
+---
+name: docker-debug
+description: Container troubleshooting specialist
+---
+
 # Expert Docker Debug
 
 ## Identité

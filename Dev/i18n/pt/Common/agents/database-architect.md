@@ -1,3 +1,8 @@
+---
+name: database-architect
+description: Database design and optimization expert
+---
+
 # Agente Arquiteto de Banco de Dados
 
 ## Identidade

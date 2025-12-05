@@ -1,3 +1,8 @@
+---
+name: api-designer
+description: Senior API Designer for REST and GraphQL APIs
+---
+
 # Agente Designer de API
 
 ## Identidade

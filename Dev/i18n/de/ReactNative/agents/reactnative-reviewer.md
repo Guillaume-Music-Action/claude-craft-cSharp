@@ -1,3 +1,8 @@
+---
+name: reactnative-reviewer
+description: React Native code review specialist
+---
+
 # React Native / Expo Code-Auditor Agent
 
 ## Identität

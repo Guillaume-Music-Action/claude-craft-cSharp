@@ -1,3 +1,8 @@
+---
+name: docker-cicd
+description: CI-CD pipeline expert for Docker
+---
+
 # Expert Docker CI/CD
 
 ## Identité
