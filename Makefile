@@ -12,7 +12,7 @@
 #===============================================================================
 
 .PHONY: help install-all install-common install-symfony install-flutter \
-        install-python install-react install-reactnative install-project \
+        install-python install-react install-reactnative install-project install-infra \
         install-tools install-statusline install-multiaccount install-projectconfig \
         list list-agents list-commands dry-run clean \
         config-install config-install-all config-validate config-list config-dry-run
@@ -162,6 +162,15 @@ install-project: ## Installe les commandes de gestion de projet (EPICs, US, Task
 		exit 1; \
 	fi
 
+install-infra: ## Installe les agents et commandes Docker/Infrastructure
+	@echo "$(CYAN)📦 Installation des règles Docker (lang=$(LANG))...$(NC)"
+	@if [ -f "$(shell pwd)/Infra/install-infra-rules.sh" ]; then \
+		$(shell pwd)/Infra/install-infra-rules.sh --lang=$(LANG) $(OPTIONS) $(TARGET); \
+	else \
+		echo "$(RED)❌ Script non trouvé: Infra/install-infra-rules.sh$(NC)"; \
+		exit 1; \
+	fi
+
 #===============================================================================
 # Combinaisons Courantes
 #===============================================================================
@@ -285,6 +294,9 @@ dry-run-react: ## Simule l'installation React
 
 dry-run-reactnative: ## Simule l'installation React Native
 	@$(MAKE) install-reactnative TARGET=$(TARGET) OPTIONS="--dry-run"
+
+dry-run-infra: ## Simule l'installation Docker/Infrastructure
+	@$(MAKE) install-infra TARGET=$(TARGET) OPTIONS="--dry-run"
 
 #===============================================================================
 # Installation depuis Configuration YAML

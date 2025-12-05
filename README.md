@@ -5,9 +5,10 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 ## Features
 
 - **5 Technology Stacks**: Symfony, Flutter, Python, React, React Native
+- **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **16 AI Agents**: Specialized reviewers, architects, coaches, and UI/UX experts
-- **70 Slash Commands**: Automated workflows and code generation
+- **21 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, and Docker experts
+- **74 Slash Commands**: Automated workflows and code generation
 - **67 Rules**: Best practices for architecture, testing, security
 - **25 Templates**: Code generation patterns
 - **21 Checklists**: Quality gates for commits, features, releases
@@ -51,13 +52,14 @@ Once installed, use the commands in your project:
 
 ## Supported Technologies
 
-| Technology | Rules | Commands | Focus |
-|------------|-------|----------|-------|
-| **Symfony** | 21 | 10 | Clean Architecture, DDD, API Platform |
-| **Flutter** | 13 | 10 | BLoC pattern, Material/Cupertino |
-| **Python** | 12 | 10 | FastAPI, async/await, Type hints |
-| **React** | 12 | 8 | Hooks, State management, A11y |
-| **React Native** | 12 | 7 | Navigation, Native modules |
+| Technology | Rules | Commands | Agents | Focus |
+|------------|-------|----------|--------|-------|
+| **Symfony** | 21 | 10 | 1 | Clean Architecture, DDD, API Platform |
+| **Flutter** | 13 | 10 | 1 | BLoC pattern, Material/Cupertino |
+| **Python** | 12 | 10 | 1 | FastAPI, async/await, Type hints |
+| **React** | 12 | 8 | 1 | Hooks, State management, A11y |
+| **React Native** | 12 | 7 | 1 | Navigation, Native modules |
+| **Docker** | - | 4 | 5 | Dockerfile, Compose, CI/CD, Debugging |
 
 ## Project Structure
 
@@ -79,6 +81,9 @@ claude-craft/
 │   │       ├── React/          # Frontend JS/TS
 │   │       └── ReactNative/    # Mobile JS/TS
 │   └── scripts/                # Installation scripts
+├── Infra/                      # Infrastructure (Docker)
+│   ├── i18n/                   # Translated agents & commands
+│   └── install-infra-rules.sh
 ├── Project/                    # Project management commands
 │   ├── i18n/                   # Translated commands
 │   └── install-project-commands.sh
@@ -103,6 +108,9 @@ make install-common TARGET=~/my-project
 make install-web TARGET=~/my-project      # React
 make install-backend TARGET=~/my-project  # Symfony + Python
 make install-mobile TARGET=~/my-project   # Flutter + React Native
+
+# Infrastructure (Docker)
+make install-infra TARGET=~/my-project
 
 # Install Claude Code tools
 make install-tools                        # All tools
@@ -177,6 +185,15 @@ make config-install PROJECT=my-monorepo
 | `react-reviewer` | React code review |
 | `reactnative-reviewer` | React Native code review |
 
+### Docker/Infrastructure Agents
+| Agent | Expertise |
+|-------|-----------|
+| `docker-dockerfile` | Dockerfile optimization, multi-stage builds |
+| `docker-compose` | Compose orchestration, networks, volumes |
+| `docker-debug` | Container troubleshooting, diagnostics |
+| `docker-cicd` | CI/CD pipelines, security scanning |
+| `docker-architect` | Complete Docker architecture design |
+
 ## Command Namespaces
 
 - `/common:` - Transversal commands (audit, changelog, CI/CD)
@@ -185,6 +202,7 @@ make config-install PROJECT=my-monorepo
 - `/python:` - Python-specific (endpoints, async, typing)
 - `/react:` - React-specific (components, hooks, a11y)
 - `/reactnative:` - React Native-specific (screens, native modules)
+- `/docker:` - Docker/Infrastructure (compose, debug, pipelines, architecture)
 
 ## Documentation
 

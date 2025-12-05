@@ -27,6 +27,7 @@ Commands can take arguments:
 | `/python:` | Python | 10 |
 | `/react:` | React/TypeScript | 8 |
 | `/reactnative:` | React Native | 7 |
+| `/docker:` | Docker/Infrastructure | 4 |
 
 ---
 
@@ -259,6 +260,26 @@ Mobile development with React Native.
 | `/reactnative:app-size` | Analyze app bundle size |
 | `/reactnative:deep-link <Route>` | Configure deep linking |
 | `/reactnative:store-prepare` | Prepare for app store |
+
+---
+
+## Docker Commands (`/docker:`)
+
+Infrastructure and containerization commands.
+
+### Setup Commands
+
+| Command | Description |
+|---------|-------------|
+| `/docker:compose-setup <Services>` | Generate docker-compose configuration |
+| `/docker:architecture <Project>` | Design complete Docker architecture |
+
+### Operations Commands
+
+| Command | Description |
+|---------|-------------|
+| `/docker:debug <Symptom>` | Diagnose Docker issues |
+| `/docker:cicd-pipeline <Platform>` | Generate CI/CD pipeline |
 
 ---
 

@@ -345,6 +345,120 @@ Focuses on:
 
 ---
 
+## Docker/Infrastructure Agents (5)
+
+Available with `install-infra`.
+
+### docker-dockerfile
+
+**Expertise**: Dockerfile creation and optimization
+
+Specializes in creating optimized, secure, and production-ready Dockerfiles using best practices.
+
+Helps with:
+- Multi-stage build optimization
+- Layer caching strategies
+- Image size reduction (≥30% target)
+- Security hardening (non-root users)
+- Build argument management
+- Health check configuration
+- Best practices compliance
+
+```
+@docker-dockerfile Optimize this Dockerfile for production
+@docker-dockerfile Review my multi-stage build
+```
+
+---
+
+### docker-compose
+
+**Expertise**: Docker Compose orchestration
+
+Expert in designing and configuring multi-service Docker environments with proper networking, volumes, and dependencies.
+
+Helps with:
+- Service orchestration
+- Network segmentation (frontend, backend, data)
+- Volume management and persistence
+- Health checks and dependencies
+- Environment-specific overrides (dev, staging, prod)
+- Secrets management
+- Resource limits configuration
+
+```
+@docker-compose Design a compose file for this microservices stack
+@docker-compose Help configure service dependencies
+```
+
+---
+
+### docker-debug
+
+**Expertise**: Docker troubleshooting and diagnostics
+
+Specializes in diagnosing and resolving Docker issues across containers, images, networks, and resources.
+
+Helps with:
+- Container startup failures
+- Network connectivity issues
+- Volume and permissions problems
+- Resource exhaustion diagnosis
+- Log analysis and debugging
+- Performance profiling
+- Health check debugging
+
+```
+@docker-debug Container keeps restarting, help me diagnose
+@docker-debug Network connection refused between services
+```
+
+---
+
+### docker-cicd
+
+**Expertise**: Docker CI/CD pipelines
+
+Expert in designing and implementing CI/CD pipelines for containerized applications.
+
+Helps with:
+- GitHub Actions workflows
+- GitLab CI pipelines
+- Image building and caching
+- Security scanning (Trivy, Snyk)
+- Multi-environment deployments
+- Rolling updates, blue-green, canary strategies
+- Registry management
+
+```
+@docker-cicd Create a GitHub Actions pipeline for this app
+@docker-cicd Set up automated image scanning
+```
+
+---
+
+### docker-architect
+
+**Expertise**: Docker architecture design
+
+Senior architect specializing in designing complete containerized architectures from project specifications.
+
+Helps with:
+- Service topology design
+- Network segmentation strategy
+- Data persistence architecture
+- Scaling strategies
+- Security architecture
+- Multi-environment setup
+- Infrastructure as Code
+
+```
+@docker-architect Design the Docker architecture for this e-commerce platform
+@docker-architect Review our microservices container strategy
+```
+
+---
+
 ## Project Agents (2)
 
 Available with `install-project-commands`.
