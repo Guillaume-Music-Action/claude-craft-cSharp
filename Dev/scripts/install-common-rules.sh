@@ -54,6 +54,7 @@ force=false
 dry_run=false
 backup=false
 interactive=false
+rules_only=false
 agents_only=false
 commands_only=false
 templates_only=false
@@ -245,6 +246,10 @@ parse_args() {
                 checklists_only=true
                 shift
                 ;;
+            --rules-only)
+                rules_only=true
+                shift
+                ;;
             -h|--help)
                 load_messages
                 print_usage
@@ -274,7 +279,8 @@ parse_args() {
     load_messages
 
     # If no filter specified, install all
-    if ! $agents_only && ! $commands_only && ! $templates_only && ! $checklists_only; then
+    if ! $rules_only && ! $agents_only && ! $commands_only && ! $templates_only && ! $checklists_only; then
+        rules_only=true
         agents_only=true
         commands_only=true
         templates_only=true
@@ -384,6 +390,21 @@ copy_directory() {
 #-------------------------------------------------------------------------------
 # Component installation
 #-------------------------------------------------------------------------------
+install_rules() {
+    log_info "${MSG_INSTALLING_RULES:-Installing common rules...}"
+
+    # Use i18n directory
+    local src_rules="$I18N_DIR/$lang/Common/rules"
+    local dest_rules="$target_dir/.claude/rules"
+
+    if [[ -d "$src_rules" ]]; then
+        copy_directory "$src_rules" "$dest_rules" "*.md"
+        copy_directory "$src_rules" "$dest_rules" "*.md.template"
+    else
+        log_warning "${MSG_RULES_NOT_FOUND:-Common rules directory not found:} $src_rules"
+    fi
+}
+
 install_agents() {
     log_info "${MSG_INSTALLING_AGENTS}"
 
@@ -557,6 +578,10 @@ main() {
     echo ""
 
     # Installation des composants sélectionnés
+    if $rules_only; then
+        install_rules
+    fi
+
     if $agents_only; then
         install_agents
     fi

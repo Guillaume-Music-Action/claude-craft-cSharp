@@ -37,19 +37,15 @@ PROJECT_SPECIFIC_FILES=(
     "rules/00-project-context.md"
 )
 
-# Fichiers communs (toujours mis a jour)
-COMMON_RULES=(
-    "01-workflow-analysis.md"
+# Fichiers tech-specifiques (les generiques sont dans Common/rules/)
+# Rules supprimees (maintenant dans Common/): 01, 04, 05, 09, 10
+TECH_RULES=(
     "02-architecture-clean-ddd.md"
     "03-coding-standards.md"
-    "04-solid-principles.md"
-    "05-kiss-dry-yagni.md"
     "06-docker-hadolint.md"
-    "07-testing-tdd-bdd.md"
+    "07-testing-symfony.md"
     "08-quality-tools.md"
-    "09-git-workflow.md"
-    "10-documentation.md"
-    "11-security-rgpd.md"
+    "11-security-symfony.md"
     "12-performance.md"
     "13-ddd-patterns.md"
     "14-multitenant.md"
@@ -61,6 +57,9 @@ COMMON_RULES=(
     "20-domain-events.md"
     "21-cqrs.md"
 )
+
+# Alias pour compatibilite
+COMMON_RULES=("${TECH_RULES[@]}")
 
 # ============================================================================
 # COLORS
@@ -270,28 +269,66 @@ create_directory_structure() {
     done
 }
 
-# Copie des regles communes
+# Copie des regles generiques depuis Common/
+copy_generic_rules() {
+    local target_dir="$1"
+    local dry_run="$2"
+    local common_rules_dir="$I18N_DIR/$lang/Common/rules"
+
+    if [[ ! -d "$common_rules_dir" ]]; then
+        log_warning "Common rules not found: $common_rules_dir"
+        return 0
+    fi
+
+    local count=0
+    for file in "$common_rules_dir"/*.md "$common_rules_dir"/*.md.template; do
+        [[ -f "$file" ]] || continue
+        local filename=$(basename "$file")
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copy generic: rules/$filename"
+        else
+            cp "$file" "${target_dir}/.claude/rules/$filename"
+        fi
+        ((count++)) || true
+    done
+
+    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
+        log_success "$count generic rules copied from Common/"
+    fi
+}
+
+# Copie des regles tech-specifiques
 copy_common_rules() {
     local target_dir="$1"
     local dry_run="$2"
     local src_dir
     src_dir=$(get_source_dir)
 
-    for rule in "${COMMON_RULES[@]}"; do
+    # D'abord, installer les regles generiques
+    copy_generic_rules "$target_dir" "$dry_run"
+
+    # Ensuite, installer les regles tech-specifiques
+    local count=0
+    for rule in "${TECH_RULES[@]}"; do
         local src_file="${src_dir}/rules/${rule}"
         # Fallback to local if i18n not available
         if [ ! -f "$src_file" ]; then
             src_file="${SCRIPT_DIR}/rules/${rule}"
+        fi
+        if [ ! -f "$src_file" ]; then
+            log_warning "Rule not found: $rule"
+            continue
         fi
         if [ "$dry_run" = "true" ]; then
             log_dry_run "Copy: rules/${rule}"
         else
             cp "$src_file" "${target_dir}/.claude/rules/${rule}"
         fi
+        ((count++)) || true
     done
 
-    if [ "$dry_run" = "false" ]; then
-        log_success "21 rules files copied"
+    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
+        log_success "$count Symfony-specific rules copied"
     fi
 }
 

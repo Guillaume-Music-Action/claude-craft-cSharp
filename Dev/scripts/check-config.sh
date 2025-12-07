@@ -224,6 +224,10 @@ check_common_installation() {
         return 1
     fi
 
+    # Rules génériques (obligatoire, min 6 fichiers de Common/rules/)
+    # Fichiers attendus: 01-workflow, 04-solid, 05-kiss-dry, 07-testing, 09-git, 10-doc, 11-security
+    check_dir_count "$path/.claude/rules" "rules (generic)" 6 || ((issues++)) || true
+
     # Agents (obligatoire, min 5)
     check_dir_count "$path/.claude/agents" "agents" 5 || ((issues++)) || true
 
@@ -251,8 +255,9 @@ check_symfony_installation() {
         return 1
     fi
 
-    # Rules (obligatoire - cœur de Symfony, min 15)
-    check_dir_count "$path/.claude/rules" "rules" 15 || ((issues++)) || true
+    # Rules (obligatoire - generic + Symfony-specific, min 18)
+    # Generic: 7 files from Common/rules/ + Symfony: ~13 tech-specific
+    check_dir_count "$path/.claude/rules" "rules" 18 || ((issues++)) || true
 
     # Commands/symfony (obligatoire, min 5)
     check_dir_count "$path/.claude/commands/symfony" "commands/symfony" 5 || ((issues++)) || true
@@ -288,8 +293,9 @@ check_flutter_installation() {
         return 1
     fi
 
-    # Rules (obligatoire, min 10)
-    check_dir_count "$path/.claude/rules" "rules" 10 || ((issues++)) || true
+    # Rules (obligatoire - generic + Flutter-specific, min 14)
+    # Generic: 7 files from Common/rules/ + Flutter: 8 tech-specific
+    check_dir_count "$path/.claude/rules" "rules" 14 || ((issues++)) || true
 
     # Commands/flutter (obligatoire, min 5)
     check_dir_count "$path/.claude/commands/flutter" "commands/flutter" 5 || ((issues++)) || true
@@ -321,8 +327,9 @@ check_react_installation() {
         return 1
     fi
 
-    # Rules (obligatoire, min 8)
-    check_dir_count "$path/.claude/rules" "rules" 8 || ((issues++)) || true
+    # Rules (obligatoire - generic + React-specific, min 12)
+    # Generic: 7 files from Common/rules/ + React: 6 tech-specific
+    check_dir_count "$path/.claude/rules" "rules" 12 || ((issues++)) || true
 
     # Commands/react (obligatoire, min 5)
     check_dir_count "$path/.claude/commands/react" "commands/react" 5 || ((issues++)) || true
@@ -354,8 +361,9 @@ check_reactnative_installation() {
         return 1
     fi
 
-    # Rules (obligatoire, min 10)
-    check_dir_count "$path/.claude/rules" "rules" 10 || ((issues++)) || true
+    # Rules (obligatoire - generic + ReactNative-specific, min 15)
+    # Generic: 7 files from Common/rules/ + ReactNative: 9 tech-specific
+    check_dir_count "$path/.claude/rules" "rules" 15 || ((issues++)) || true
 
     # Commands/reactnative (obligatoire, min 5)
     check_dir_count "$path/.claude/commands/reactnative" "commands/reactnative" 5 || ((issues++)) || true
@@ -387,8 +395,9 @@ check_python_installation() {
         return 1
     fi
 
-    # Rules (obligatoire, min 6)
-    check_dir_count "$path/.claude/rules" "rules" 6 || ((issues++)) || true
+    # Rules (obligatoire - generic + Python-specific, min 10)
+    # Generic: 7 files from Common/rules/ + Python: 4 tech-specific
+    check_dir_count "$path/.claude/rules" "rules" 10 || ((issues++)) || true
 
     # Commands/python (obligatoire, min 5)
     check_dir_count "$path/.claude/commands/python" "commands/python" 5 || ((issues++)) || true
