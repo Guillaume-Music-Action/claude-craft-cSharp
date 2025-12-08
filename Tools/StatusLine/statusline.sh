@@ -8,10 +8,27 @@
 set -o pipefail
 
 # -----------------------------------------------------------------------------
-# Configuration
+# Configuration par défaut
 # -----------------------------------------------------------------------------
 CONTEXT_WARN_THRESHOLD=60
 CONTEXT_CRIT_THRESHOLD=80
+
+# Limites d'utilisation (peuvent être surchargées par statusline.conf)
+# Valeurs par défaut pour Max 20x ($200/mois)
+SESSION_COST_LIMIT=500.00
+WEEKLY_COST_LIMIT=3000.00
+USAGE_WARN_THRESHOLD=60
+USAGE_CRIT_THRESHOLD=80
+SESSION_CACHE_TTL=60
+WEEKLY_CACHE_TTL=300
+SHOW_SESSION_LIMIT=true
+SHOW_WEEKLY_LIMIT=true
+SESSION_LABEL="⏱️ 5h"
+WEEKLY_LABEL="📅 Sem"
+
+# Charger la configuration utilisateur si elle existe
+STATUSLINE_CONF="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/statusline.conf"
+[[ -f "$STATUSLINE_CONF" ]] && source "$STATUSLINE_CONF"
 
 # Couleurs ANSI
 C_RESET='\033[00m'
@@ -182,7 +199,101 @@ get_session_cost() {
 COST=$(get_session_cost)
 
 # -----------------------------------------------------------------------------
-# 7. HEURE
+# 7. USAGE SESSION (% de la limite 5h) via ccusage
+# -----------------------------------------------------------------------------
+get_usage_color() {
+    local pct="$1"
+    [[ -z "$pct" ]] && echo "$C_DIM" && return
+
+    if [[ "$pct" -ge "$USAGE_CRIT_THRESHOLD" ]]; then
+        echo "$C_RED"
+    elif [[ "$pct" -ge "$USAGE_WARN_THRESHOLD" ]]; then
+        echo "$C_YELLOW"
+    else
+        echo "$C_GREEN"
+    fi
+}
+
+get_session_usage_pct() {
+    [[ "$SHOW_SESSION_LIMIT" != "true" ]] && return
+
+    # Cache pour éviter appels répétés (ccusage est lent)
+    local cache_file="/tmp/.ccusage_session_cache"
+    local now=$(date +%s)
+
+    if [[ -f "$cache_file" ]]; then
+        local cache_time=$(stat -c %Y "$cache_file" 2>/dev/null || echo 0)
+        if [[ $((now - cache_time)) -lt $SESSION_CACHE_TTL ]]; then
+            cat "$cache_file"
+            return
+        fi
+    fi
+
+    # Vérifier que npx est disponible
+    if ! command -v npx &>/dev/null; then
+        return
+    fi
+
+    local today=$(date +%Y%m%d)
+    local cost=$(timeout 5 npx --yes ccusage@latest daily --since "$today" --json 2>/dev/null | jq -r '.summary.totalCost // 0' 2>/dev/null)
+
+    if [[ -z "$cost" ]] || [[ "$cost" == "null" ]]; then
+        return
+    fi
+
+    # Calcul du pourcentage
+    local pct=$(echo "$cost $SESSION_COST_LIMIT" | awk '{if($2>0) printf "%d", ($1/$2)*100; else print 0}')
+    [[ "$pct" -gt 100 ]] && pct=100
+
+    echo "$pct" > "$cache_file"
+    echo "$pct"
+}
+
+# -----------------------------------------------------------------------------
+# 8. USAGE HEBDOMADAIRE (% de la limite semaine) via ccusage
+# -----------------------------------------------------------------------------
+get_weekly_usage_pct() {
+    [[ "$SHOW_WEEKLY_LIMIT" != "true" ]] && return
+
+    # Cache pour éviter appels répétés
+    local cache_file="/tmp/.ccusage_weekly_cache"
+    local now=$(date +%s)
+
+    if [[ -f "$cache_file" ]]; then
+        local cache_time=$(stat -c %Y "$cache_file" 2>/dev/null || echo 0)
+        if [[ $((now - cache_time)) -lt $WEEKLY_CACHE_TTL ]]; then
+            cat "$cache_file"
+            return
+        fi
+    fi
+
+    # Vérifier que npx est disponible
+    if ! command -v npx &>/dev/null; then
+        return
+    fi
+
+    local week_ago=$(date -d "7 days ago" +%Y%m%d 2>/dev/null || date -v-7d +%Y%m%d 2>/dev/null)
+    [[ -z "$week_ago" ]] && return
+
+    local cost=$(timeout 8 npx --yes ccusage@latest daily --since "$week_ago" --json 2>/dev/null | jq -r '.summary.totalCost // 0' 2>/dev/null)
+
+    if [[ -z "$cost" ]] || [[ "$cost" == "null" ]]; then
+        return
+    fi
+
+    # Calcul du pourcentage
+    local pct=$(echo "$cost $WEEKLY_COST_LIMIT" | awk '{if($2>0) printf "%d", ($1/$2)*100; else print 0}')
+    [[ "$pct" -gt 100 ]] && pct=100
+
+    echo "$pct" > "$cache_file"
+    echo "$pct"
+}
+
+SESSION_USAGE_PCT=$(get_session_usage_pct)
+WEEKLY_USAGE_PCT=$(get_weekly_usage_pct)
+
+# -----------------------------------------------------------------------------
+# 9. HEURE
 # -----------------------------------------------------------------------------
 CURRENT_TIME=$(date +"%H:%M")
 
@@ -212,6 +323,18 @@ output+=" ${C_DIM}|${C_RESET} ${C_BLUE}📁 ${PROJECT_NAME}${C_RESET}"
 # Contexte (couleur selon seuil)
 if [[ -n "$CONTEXT_PCT" ]]; then
     output+=" ${C_DIM}|${C_RESET} ${CONTEXT_COLOR}📊 ${CONTEXT_PCT}%${C_RESET}"
+fi
+
+# Usage session (couleur selon seuil)
+if [[ -n "$SESSION_USAGE_PCT" ]] && [[ "$SESSION_USAGE_PCT" != "0" ]]; then
+    SESSION_COLOR=$(get_usage_color "$SESSION_USAGE_PCT")
+    output+=" ${C_DIM}|${C_RESET} ${SESSION_COLOR}${SESSION_LABEL}: ${SESSION_USAGE_PCT}%${C_RESET}"
+fi
+
+# Usage hebdomadaire (couleur selon seuil)
+if [[ -n "$WEEKLY_USAGE_PCT" ]] && [[ "$WEEKLY_USAGE_PCT" != "0" ]]; then
+    WEEKLY_COLOR=$(get_usage_color "$WEEKLY_USAGE_PCT")
+    output+=" ${C_DIM}|${C_RESET} ${WEEKLY_COLOR}${WEEKLY_LABEL}: ${WEEKLY_USAGE_PCT}%${C_RESET}"
 fi
 
 # Coût (blanc)
