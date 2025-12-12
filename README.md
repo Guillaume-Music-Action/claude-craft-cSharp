@@ -206,6 +206,23 @@ make config-install PROJECT=my-monorepo
 
 ## Documentation
 
+### 📚 User Guides (Multilingual)
+
+Complete step-by-step tutorials for getting started, developing features, and fixing bugs:
+
+| Guide | 🇬🇧 EN | 🇫🇷 FR | 🇪🇸 ES | 🇩🇪 DE | 🇧🇷 PT |
+|-------|--------|--------|--------|--------|--------|
+| Getting Started | [EN](docs/guides/en/01-getting-started.md) | [FR](docs/guides/fr/01-getting-started.md) | [ES](docs/guides/es/01-getting-started.md) | [DE](docs/guides/de/01-getting-started.md) | [PT](docs/guides/pt/01-getting-started.md) |
+| Project Creation | [EN](docs/guides/en/02-project-creation.md) | [FR](docs/guides/fr/02-project-creation.md) | [ES](docs/guides/es/02-project-creation.md) | [DE](docs/guides/de/02-project-creation.md) | [PT](docs/guides/pt/02-project-creation.md) |
+| Feature Development | [EN](docs/guides/en/03-feature-development.md) | [FR](docs/guides/fr/03-feature-development.md) | [ES](docs/guides/es/03-feature-development.md) | [DE](docs/guides/de/03-feature-development.md) | [PT](docs/guides/pt/03-feature-development.md) |
+| Bug Fixing | [EN](docs/guides/en/04-bug-fixing.md) | [FR](docs/guides/fr/04-bug-fixing.md) | [ES](docs/guides/es/04-bug-fixing.md) | [DE](docs/guides/de/04-bug-fixing.md) | [PT](docs/guides/pt/04-bug-fixing.md) |
+| Tools Reference | [EN](docs/guides/en/05-tools-reference.md) | [FR](docs/guides/fr/05-tools-reference.md) | [ES](docs/guides/es/05-tools-reference.md) | [DE](docs/guides/de/05-tools-reference.md) | [PT](docs/guides/pt/05-tools-reference.md) |
+| Troubleshooting | [EN](docs/guides/en/06-troubleshooting.md) | [FR](docs/guides/fr/06-troubleshooting.md) | [ES](docs/guides/es/06-troubleshooting.md) | [DE](docs/guides/de/06-troubleshooting.md) | [PT](docs/guides/pt/06-troubleshooting.md) |
+
+📖 [Guide Index](docs/guides/index.md)
+
+### 📋 Reference Documentation
+
 - [Installation Guide](docs/INSTALLATION.md)
 - [Configuration](docs/CONFIGURATION.md)
 - [Agents Reference](docs/AGENTS.md)
