@@ -133,4 +133,4 @@ yq --version  # Verificar versão
 
 ---
 
-[&larr; Referência de Ferramentas](05-tools-reference.md) | [Voltar ao Índice](../index.md)
+[&larr; Referência de Ferramentas](05-tools-reference.md) | [Gestão do Backlog &rarr;](07-backlog-management.md)

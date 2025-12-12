@@ -218,6 +218,7 @@ Complete step-by-step tutorials for getting started, developing features, and fi
 | Bug Fixing | [EN](docs/guides/en/04-bug-fixing.md) | [FR](docs/guides/fr/04-bug-fixing.md) | [ES](docs/guides/es/04-bug-fixing.md) | [DE](docs/guides/de/04-bug-fixing.md) | [PT](docs/guides/pt/04-bug-fixing.md) |
 | Tools Reference | [EN](docs/guides/en/05-tools-reference.md) | [FR](docs/guides/fr/05-tools-reference.md) | [ES](docs/guides/es/05-tools-reference.md) | [DE](docs/guides/de/05-tools-reference.md) | [PT](docs/guides/pt/05-tools-reference.md) |
 | Troubleshooting | [EN](docs/guides/en/06-troubleshooting.md) | [FR](docs/guides/fr/06-troubleshooting.md) | [ES](docs/guides/es/06-troubleshooting.md) | [DE](docs/guides/de/06-troubleshooting.md) | [PT](docs/guides/pt/06-troubleshooting.md) |
+| Backlog Management | [EN](docs/guides/en/07-backlog-management.md) | [FR](docs/guides/fr/07-backlog-management.md) | [ES](docs/guides/es/07-backlog-management.md) | [DE](docs/guides/de/07-backlog-management.md) | [PT](docs/guides/pt/07-backlog-management.md) |
 
 📖 [Guide Index](docs/guides/index.md)
 

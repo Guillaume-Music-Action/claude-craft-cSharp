@@ -8,11 +8,11 @@ Complete documentation for using Claude-Craft, from project creation to feature 
 
 | Language | Guides |
 |----------|--------|
-| **English** | [Getting Started](en/01-getting-started.md) \| [Project Creation](en/02-project-creation.md) \| [Feature Development](en/03-feature-development.md) \| [Bug Fixing](en/04-bug-fixing.md) \| [Tools](en/05-tools-reference.md) \| [Troubleshooting](en/06-troubleshooting.md) |
-| **Fran&ccedil;ais** | [D&eacute;marrage](fr/01-getting-started.md) \| [Cr&eacute;ation Projet](fr/02-project-creation.md) \| [D&eacute;veloppement](fr/03-feature-development.md) \| [Correction Bugs](fr/04-bug-fixing.md) \| [Outils](fr/05-tools-reference.md) \| [D&eacute;pannage](fr/06-troubleshooting.md) |
-| **Espa&ntilde;ol** | [Inicio](es/01-getting-started.md) \| [Creaci&oacute;n Proyecto](es/02-project-creation.md) \| [Desarrollo](es/03-feature-development.md) \| [Correcci&oacute;n Bugs](es/04-bug-fixing.md) \| [Herramientas](es/05-tools-reference.md) \| [Soluci&oacute;n](es/06-troubleshooting.md) |
-| **Deutsch** | [Erste Schritte](de/01-getting-started.md) \| [Projekterstellung](de/02-project-creation.md) \| [Entwicklung](de/03-feature-development.md) \| [Fehlerbehebung](de/04-bug-fixing.md) \| [Werkzeuge](de/05-tools-reference.md) \| [Probleml&ouml;sung](de/06-troubleshooting.md) |
-| **Portugu&ecirc;s** | [Introdu&ccedil;&atilde;o](pt/01-getting-started.md) \| [Cria&ccedil;&atilde;o Projeto](pt/02-project-creation.md) \| [Desenvolvimento](pt/03-feature-development.md) \| [Corre&ccedil;&atilde;o Bugs](pt/04-bug-fixing.md) \| [Ferramentas](pt/05-tools-reference.md) \| [Resolu&ccedil;&atilde;o](pt/06-troubleshooting.md) |
+| **English** | [Getting Started](en/01-getting-started.md) \| [Project Creation](en/02-project-creation.md) \| [Feature Development](en/03-feature-development.md) \| [Bug Fixing](en/04-bug-fixing.md) \| [Tools](en/05-tools-reference.md) \| [Troubleshooting](en/06-troubleshooting.md) \| [Backlog](en/07-backlog-management.md) |
+| **Fran&ccedil;ais** | [D&eacute;marrage](fr/01-getting-started.md) \| [Cr&eacute;ation Projet](fr/02-project-creation.md) \| [D&eacute;veloppement](fr/03-feature-development.md) \| [Correction Bugs](fr/04-bug-fixing.md) \| [Outils](fr/05-tools-reference.md) \| [D&eacute;pannage](fr/06-troubleshooting.md) \| [Backlog](fr/07-backlog-management.md) |
+| **Espa&ntilde;ol** | [Inicio](es/01-getting-started.md) \| [Creaci&oacute;n Proyecto](es/02-project-creation.md) \| [Desarrollo](es/03-feature-development.md) \| [Correcci&oacute;n Bugs](es/04-bug-fixing.md) \| [Herramientas](es/05-tools-reference.md) \| [Soluci&oacute;n](es/06-troubleshooting.md) \| [Backlog](es/07-backlog-management.md) |
+| **Deutsch** | [Erste Schritte](de/01-getting-started.md) \| [Projekterstellung](de/02-project-creation.md) \| [Entwicklung](de/03-feature-development.md) \| [Fehlerbehebung](de/04-bug-fixing.md) \| [Werkzeuge](de/05-tools-reference.md) \| [Probleml&ouml;sung](de/06-troubleshooting.md) \| [Backlog](de/07-backlog-management.md) |
+| **Portugu&ecirc;s** | [Introdu&ccedil;&atilde;o](pt/01-getting-started.md) \| [Cria&ccedil;&atilde;o Projeto](pt/02-project-creation.md) \| [Desenvolvimento](pt/03-feature-development.md) \| [Corre&ccedil;&atilde;o Bugs](pt/04-bug-fixing.md) \| [Ferramentas](pt/05-tools-reference.md) \| [Resolu&ccedil;&atilde;o](pt/06-troubleshooting.md) \| [Backlog](pt/07-backlog-management.md) |
 
 ---
 
@@ -35,6 +35,9 @@ Detailed guide for MultiAccount Manager, StatusLine, and ProjectConfig Manager u
 
 ### 6. Troubleshooting
 Common issues and solutions for installation, agents, commands, and configuration.
+
+### 7. Backlog Management
+Complete SCRUM backlog workflow: generating backlog from specs, managing EPICs/User Stories/Tasks, and 15 project management commands.
 
 ---
 

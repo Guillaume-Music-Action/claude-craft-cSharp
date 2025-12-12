@@ -598,4 +598,4 @@ When something doesn't work:
 
 ---
 
-[&larr; Tools Reference](05-tools-reference.md) | [Back to Index](../index.md)
+[&larr; Tools Reference](05-tools-reference.md) | [Backlog Management &rarr;](07-backlog-management.md)

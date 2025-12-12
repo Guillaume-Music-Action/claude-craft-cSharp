@@ -133,4 +133,4 @@ yq --version  # Version überprüfen
 
 ---
 
-[&larr; Werkzeuge-Referenz](05-tools-reference.md) | [Zurück zum Index](../index.md)
+[&larr; Werkzeuge-Referenz](05-tools-reference.md) | [Backlog-Management &rarr;](07-backlog-management.md)

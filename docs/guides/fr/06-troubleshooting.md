@@ -598,4 +598,4 @@ Quand quelque chose ne fonctionne pas :
 
 ---
 
-[&larr; Référence des Outils](05-tools-reference.md) | [Retour à l'Index](../index.md)
+[&larr; Référence des Outils](05-tools-reference.md) | [Gestion du Backlog &rarr;](07-backlog-management.md)
