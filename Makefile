@@ -17,7 +17,9 @@
         install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands dry-run clean \
         config-install config-install-all config-validate config-list config-dry-run \
-        config-check config-check-fix check fix-permissions tree stats
+        config-check config-check-fix check fix-permissions tree stats \
+        migrate migrate-dry-run migrate-all migrate-check \
+        plugin-export plugin-export-all
 
 # Configuration
 SHELL := /bin/bash
@@ -345,6 +347,75 @@ config-check-fix: ## Vérifie et propose de corriger les problèmes
 	else \
 		$(SCRIPTS_DIR)/check-config.sh --fix $(CONFIG); \
 	fi
+
+#===============================================================================
+# Migration de Projets Existants
+#===============================================================================
+
+migrate: ## Migre un projet existant vers v3.0 (hooks, MCP, skills)
+	@if [ "$(TARGET)" = "." ]; then \
+		echo "$(RED)❌ Erreur: TARGET non spécifié$(NC)"; \
+		echo ""; \
+		echo "Usage: make migrate TARGET=~/mon-projet [RULES_LANG=fr]"; \
+		exit 1; \
+	fi
+	@$(SCRIPTS_DIR)/migrate-project.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+
+migrate-dry-run: ## Simule la migration sans modifier
+	@if [ "$(TARGET)" = "." ]; then \
+		echo "$(RED)❌ Erreur: TARGET non spécifié$(NC)"; \
+		echo ""; \
+		echo "Usage: make migrate-dry-run TARGET=~/mon-projet"; \
+		exit 1; \
+	fi
+	@$(SCRIPTS_DIR)/migrate-project.sh --dry-run --lang=$(RULES_LANG) $(TARGET)
+
+migrate-all: ## Migre tous les projets de la config YAML
+	@echo "$(CYAN)🔄 Migration de tous les projets configurés...$(NC)"
+	@for project in $$($(SCRIPTS_DIR)/install-from-config.sh --list $(CONFIG) 2>/dev/null | grep -E '^\s+-' | sed 's/.*- //'); do \
+		root=$$($(SCRIPTS_DIR)/install-from-config.sh --show-root $$project $(CONFIG) 2>/dev/null); \
+		if [ -n "$$root" ] && [ -d "$$root/.claude" ]; then \
+			echo ""; \
+			echo "$(YELLOW)>>> Migrating: $$project ($$root)$(NC)"; \
+			$(SCRIPTS_DIR)/migrate-project.sh --lang=$(RULES_LANG) $(OPTIONS) "$$root" || true; \
+		fi \
+	done
+	@echo ""
+	@echo "$(GREEN)✅ Migration terminée$(NC)"
+
+migrate-check: ## Vérifie le statut de migration des projets
+	@echo "$(CYAN)🔍 Vérification du statut de migration...$(NC)"
+	@echo ""
+	@for project in $$($(SCRIPTS_DIR)/install-from-config.sh --list $(CONFIG) 2>/dev/null | grep -E '^\s+-' | sed 's/.*- //'); do \
+		root=$$($(SCRIPTS_DIR)/install-from-config.sh --show-root $$project $(CONFIG) 2>/dev/null); \
+		if [ -d "$$root/.claude" ]; then \
+			version=$$(cat "$$root/.claude/.claude-craft-version" 2>/dev/null || echo "unknown"); \
+			has_hooks=$$([ -d "$$root/.claude/hooks" ] && echo "✓" || echo "✗"); \
+			has_mcp=$$([ -f "$$root/.mcp.json" ] && echo "✓" || echo "✗"); \
+			echo "  $(GREEN)$$project$(NC): v$$version | hooks:$$has_hooks | mcp:$$has_mcp"; \
+		fi \
+	done
+
+#===============================================================================
+# Export Plugin
+#===============================================================================
+
+PLUGIN_OUTPUT ?= ./dist/plugins
+TECH ?=
+
+plugin-export: ## Exporte une technologie comme plugin (TECH=symfony)
+	@if [ -z "$(TECH)" ]; then \
+		echo "$(RED)❌ Erreur: TECH non spécifié$(NC)"; \
+		echo ""; \
+		echo "Usage: make plugin-export TECH=symfony [RULES_LANG=fr] [PLUGIN_OUTPUT=./dist]"; \
+		echo ""; \
+		echo "Technologies disponibles: common, symfony, flutter, python, react, reactnative, project, infra"; \
+		exit 1; \
+	fi
+	@$(TOOLS_DIR)/PluginExport/export-plugin.sh --tech=$(TECH) --lang=$(RULES_LANG) $(PLUGIN_OUTPUT)
+
+plugin-export-all: ## Exporte toutes les technologies comme plugins
+	@$(TOOLS_DIR)/PluginExport/export-plugin.sh --all --lang=$(RULES_LANG) $(PLUGIN_OUTPUT)
 
 #===============================================================================
 # Lister les Composants

@@ -218,7 +218,9 @@ get_session_usage_pct() {
     [[ "$SHOW_SESSION_LIMIT" != "true" ]] && return
 
     # Cache pour éviter appels répétés (ccusage est lent)
-    local cache_file="/tmp/.ccusage_session_cache"
+    local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/claude-statusline"
+    mkdir -p "$cache_dir" 2>/dev/null
+    local cache_file="$cache_dir/session_cache"
     local now=$(date +%s)
 
     if [[ -f "$cache_file" ]]; then
@@ -256,7 +258,9 @@ get_weekly_usage_pct() {
     [[ "$SHOW_WEEKLY_LIMIT" != "true" ]] && return
 
     # Cache pour éviter appels répétés
-    local cache_file="/tmp/.ccusage_weekly_cache"
+    local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/claude-statusline"
+    mkdir -p "$cache_dir" 2>/dev/null
+    local cache_file="$cache_dir/weekly_cache"
     local now=$(date +%s)
 
     if [[ -f "$cache_file" ]]; then

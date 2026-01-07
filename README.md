@@ -2,6 +2,14 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
+## What's New in v3.0
+
+- **Hooks System**: Automated quality gates, linting, and notifications
+- **MCP Integration**: Context7 for up-to-date library documentation
+- **Migration Tool**: Upgrade existing projects to v3.0
+- **Plugin Export**: Package for Claude Code marketplace distribution
+- **Enhanced Settings**: Granular permissions and tool allowlists
+
 ## Features
 
 - **5 Technology Stacks**: Symfony, Flutter, Python, React, React Native
@@ -12,6 +20,8 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
 - **30 Templates**: Code generation patterns
 - **21 Checklists**: Quality gates for commits, features, releases
+- **Hooks System**: Pre/Post tool execution, quality gates, notifications
+- **MCP Templates**: Context7, GitHub, PostgreSQL, Slack integration
 - **Auto-generated CLAUDE.md**: Project configuration file created at installation
 - **Multi-Account Manager**: Manage multiple Claude Code accounts easily
 - **Custom Status Line**: Rich status bar with profile, model, git, context %
@@ -92,7 +102,8 @@ claude-craft/
 └── Tools/                      # Claude Code utilities
     ├── MultiAccount/           # Multi-account manager
     ├── StatusLine/             # Custom status line
-    └── ProjectConfig/          # YAML project manager
+    ├── ProjectConfig/          # YAML project manager
+    └── PluginExport/           # Export as Claude Code plugins
 ```
 
 ### What Gets Installed
@@ -103,6 +114,7 @@ After installation, your project will have:
 your-project/
 └── .claude/
     ├── CLAUDE.md           # Auto-generated project configuration
+    ├── settings.json       # Permissions and tool allowlists
     ├── skills/             # Best practices (official format)
     │   ├── architecture/   # Architecture patterns
     │   ├── testing/        # Testing strategies
@@ -111,6 +123,8 @@ your-project/
     ├── commands/           # Slash commands
     │   ├── common/
     │   └── {tech}/
+    ├── hooks/              # Pre/Post tool execution scripts
+    ├── mcp/                # MCP server templates
     ├── checklists/         # Quality gates
     └── rules/              # Legacy rules (backward compat)
 ```
@@ -139,6 +153,10 @@ make install-tools                        # All tools
 make install-statusline                   # Custom status line
 make install-multiaccount                 # Multi-account manager
 make install-projectconfig                # Project config manager
+
+# Migrate existing projects to v3.0
+make migrate TARGET=~/my-project          # Upgrade project
+make migrate-dry-run TARGET=~/my-project  # Preview changes
 ```
 
 ### Method 2: YAML Configuration (Monorepos)
@@ -252,7 +270,9 @@ Complete step-by-step tutorials for getting started, developing features, and fi
 - [Agents Reference](docs/AGENTS.md)
 - [Commands Reference](docs/COMMANDS.md)
 - [Technologies Guide](docs/TECHNOLOGIES.md)
-- [Migration Guide](docs/MIGRATION.md) - Rules to Skills migration
+- [Migration Guide](docs/MIGRATION.md) - Upgrade existing projects to v3.0
+- [Hooks Guide](docs/HOOKS.md) - Pre/Post tool execution automation
+- [MCP Guide](docs/MCP.md) - Model Context Protocol integration
 
 ## Requirements
 
