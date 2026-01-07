@@ -1,0 +1,46 @@
+{
+  "name": "claude-craft",
+  "version": "3.0.0",
+  "description": "A comprehensive framework for AI-assisted development with Claude Code. Install standardized rules, agents, and commands for your projects.",
+  "main": "cli/index.js",
+  "bin": {
+    "claude-craft": "./cli/index.js"
+  },
+  "scripts": {
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ai",
+    "development",
+    "rules",
+    "agents",
+    "commands",
+    "workflow",
+    "symfony",
+    "flutter",
+    "react",
+    "python"
+  ],
+  "author": "TheBeardedCTO",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheBeardedBearSAS/claude-craft.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TheBeardedBearSAS/claude-craft/issues"
+  },
+  "homepage": "https://github.com/TheBeardedBearSAS/claude-craft#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "cli/",
+    "Dev/",
+    "Infra/",
+    "Project/",
+    "Tools/"
+  ]
+}

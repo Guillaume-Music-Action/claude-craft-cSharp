@@ -8,6 +8,10 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Workflow Orchestrator**: Intelligent routing to appropriate agents and tracks
 - **PRD/Tech Spec Generation**: Automated documentation from project context
 - **3 Development Tracks**: Quick Flow, Standard, Enterprise - adapted to complexity
+- **NPX Interactive CLI**: Install with `npx claude-craft` - interactive wizard
+- **Codebase Flattener**: Generate context-optimized codebase summary for AI
+- **Document Sharding**: Automatic splitting for large codebases (90% token savings)
+- **Web Bundles**: Pre-built instructions for ChatGPT, Claude Projects, Gemini Gems
 - **Hooks System**: Automated quality gates, linting, and notifications
 - **MCP Integration**: Context7 for up-to-date library documentation
 - **Migration Tool**: Upgrade existing projects to v3.0
@@ -79,14 +83,24 @@ Claude-Craft includes a BMAD-inspired workflow system that adapts to your projec
 
 ## Quick Start
 
-### 1. Clone the repository
+### Method 1: NPX (Recommended)
+
+```bash
+# Interactive installation wizard
+npx claude-craft
+
+# Or install to specific directory
+npx claude-craft install ~/my-project --tech=symfony --lang=fr
+```
+
+### Method 2: Clone Repository
 
 ```bash
 git clone https://github.com/TheBeardedBearSAS/claude-craft.git
 cd claude-craft
 ```
 
-### 2. Install rules to your project
+Then install rules to your project:
 
 ```bash
 # Install Symfony rules (default: English)
@@ -150,11 +164,18 @@ claude-craft/
 ├── Project/                    # Project management commands
 │   ├── i18n/                   # Translated commands
 │   └── install-project-commands.sh
-└── Tools/                      # Claude Code utilities
-    ├── MultiAccount/           # Multi-account manager
-    ├── StatusLine/             # Custom status line
-    ├── ProjectConfig/          # YAML project manager
-    └── PluginExport/           # Export as Claude Code plugins
+├── Tools/                      # Claude Code utilities
+│   ├── MultiAccount/           # Multi-account manager
+│   ├── StatusLine/             # Custom status line
+│   ├── ProjectConfig/          # YAML project manager
+│   └── PluginExport/           # Export as Claude Code plugins
+├── cli/                        # NPX CLI (npx claude-craft)
+│   ├── index.js                # Interactive installer
+│   └── flattener.js            # Codebase flattener
+└── bundles/                    # Web platform bundles
+    ├── chatgpt/                # ChatGPT bundle
+    ├── claude/                 # Claude Projects bundle
+    └── gemini/                 # Gemini Gems bundle
 ```
 
 ### What Gets Installed
@@ -245,6 +266,43 @@ make config-install PROJECT=my-monorepo
 ./Dev/scripts/install-symfony-rules.sh --lang=fr ~/my-project
 ./Dev/scripts/install-flutter-rules.sh --lang=de ~/my-project
 ```
+
+## CLI Tools
+
+### Codebase Flattener
+
+Generate a context-optimized summary of your codebase for AI assistants:
+
+```bash
+# Generate flattened context
+npx claude-craft flatten
+
+# With custom output file
+npx claude-craft flatten --output=CONTEXT.md
+
+# For large codebases (automatic sharding)
+npx claude-craft flatten --max-tokens=50000
+```
+
+Features:
+- Smart file selection (ignores node_modules, vendor, etc.)
+- Automatic document sharding for large projects
+- Token estimation
+- Priority-based file ordering
+- File tree generation
+
+### Web Bundles
+
+Use Claude-Craft methodology outside of Claude Code:
+
+```bash
+claude-craft/bundles/
+├── chatgpt/claude-craft-bundle.md    # For ChatGPT Custom Instructions
+├── claude/claude-craft-bundle.md     # For Claude Projects
+└── gemini/claude-craft-bundle.md     # For Gemini Gems
+```
+
+Copy the appropriate bundle into your preferred AI platform's custom instructions.
 
 ## Available Agents
 

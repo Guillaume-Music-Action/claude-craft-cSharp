@@ -1,0 +1,527 @@
+#!/usr/bin/env node
+
+/**
+ * Claude-Craft CLI
+ * Interactive installer for Claude Code rules, agents, and commands
+ *
+ * Usage: npx claude-craft [command] [options]
+ */
+
+const readline = require('readline');
+const { execSync, spawn } = require('child_process');
+const path = require('path');
+const fs = require('fs');
+
+// ANSI colors
+const colors = {
+  reset: '\x1b[0m',
+  bold: '\x1b[1m',
+  dim: '\x1b[2m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
+  white: '\x1b[37m',
+  bgBlue: '\x1b[44m',
+  bgGreen: '\x1b[42m',
+};
+
+const c = colors;
+
+// CLI package root
+const CLI_ROOT = path.resolve(__dirname, '..');
+
+// Available technologies
+const TECHNOLOGIES = {
+  symfony: { name: 'Symfony', desc: 'PHP backend with Clean Architecture, DDD, API Platform' },
+  flutter: { name: 'Flutter', desc: 'Mobile Dart with BLoC pattern, Material/Cupertino' },
+  react: { name: 'React', desc: 'Frontend JS/TS with Hooks, State management, A11y' },
+  reactnative: { name: 'React Native', desc: 'Mobile JS/TS with Navigation, Native modules' },
+  python: { name: 'Python', desc: 'Backend with FastAPI, async/await, Type hints' },
+  docker: { name: 'Docker', desc: 'Dockerfile, Compose, CI/CD, Debugging' },
+};
+
+// Available languages
+const LANGUAGES = {
+  en: 'English',
+  fr: 'Français',
+  es: 'Español',
+  de: 'Deutsch',
+  pt: 'Português',
+};
+
+// Workflow tracks
+const TRACKS = {
+  quick: { name: 'Quick Flow', desc: 'Bug fixes, hotfixes, small tweaks (< 5 min)', phases: 1 },
+  standard: { name: 'Standard', desc: 'New features, refactoring (< 15 min)', phases: 3 },
+  enterprise: { name: 'Enterprise', desc: 'Platforms, migrations, multi-team (< 30 min)', phases: 4 },
+};
+
+class ClaudeCraftCLI {
+  constructor() {
+    this.rl = null;
+    this.config = {
+      targetPath: process.cwd(),
+      language: 'en',
+      technologies: [],
+      includeCommon: true,
+      includeInfra: false,
+      includeProject: true,
+      track: null,
+    };
+  }
+
+  // Create readline interface
+  createReadline() {
+    this.rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+  }
+
+  // Close readline
+  closeReadline() {
+    if (this.rl) {
+      this.rl.close();
+      this.rl = null;
+    }
+  }
+
+  // Prompt user for input
+  async prompt(question) {
+    return new Promise((resolve) => {
+      this.rl.question(question, (answer) => {
+        resolve(answer.trim());
+      });
+    });
+  }
+
+  // Print banner
+  printBanner() {
+    console.log(`
+${c.cyan}${c.bold}╔═══════════════════════════════════════════════════════════════╗${c.reset}
+${c.cyan}${c.bold}║${c.reset}                                                               ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.magenta}${c.bold}██████╗██╗      █████╗ ██╗   ██╗██████╗ ███████╗${c.reset}        ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.magenta}${c.bold}██╔════╝██║     ██╔══██╗██║   ██║██╔══██╗██╔════╝${c.reset}        ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.magenta}${c.bold}██║     ██║     ███████║██║   ██║██║  ██║█████╗${c.reset}          ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.magenta}${c.bold}██║     ██║     ██╔══██║██║   ██║██║  ██║██╔══╝${c.reset}          ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.magenta}${c.bold}╚██████╗███████╗██║  ██║╚██████╔╝██████╔╝███████╗${c.reset}        ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.magenta}${c.bold} ╚═════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝${c.reset}        ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}                                                               ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.blue}${c.bold}██████╗██████╗  █████╗ ███████╗████████╗${c.reset}                ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.blue}${c.bold}██╔════╝██╔══██╗██╔══██╗██╔════╝╚══██╔══╝${c.reset}                ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.blue}${c.bold}██║     ██████╔╝███████║█████╗     ██║${c.reset}                   ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.blue}${c.bold}██║     ██╔══██╗██╔══██║██╔══╝     ██║${c.reset}                   ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.blue}${c.bold}╚██████╗██║  ██║██║  ██║██║        ██║${c.reset}                   ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.blue}${c.bold} ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝${c.reset}                   ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}                                                               ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.dim}AI-Assisted Development Framework for Claude Code${c.reset}          ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.dim}Version 3.0.0${c.reset}                                              ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}                                                               ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}╚═══════════════════════════════════════════════════════════════╝${c.reset}
+`);
+  }
+
+  // Print help
+  printHelp() {
+    console.log(`
+${c.bold}Usage:${c.reset} npx claude-craft [command] [options]
+
+${c.bold}Commands:${c.reset}
+  ${c.green}install${c.reset}              Interactive installation wizard
+  ${c.green}install <path>${c.reset}       Install to specific directory
+  ${c.green}init${c.reset}                 Initialize workflow in current project
+  ${c.green}flatten${c.reset}              Generate flattened codebase summary
+  ${c.green}help${c.reset}                 Show this help message
+
+${c.bold}Options:${c.reset}
+  ${c.yellow}--lang=XX${c.reset}            Language (en, fr, es, de, pt)
+  ${c.yellow}--tech=NAME${c.reset}          Technology (symfony, flutter, react, reactnative, python)
+  ${c.yellow}--force${c.reset}              Overwrite existing files
+  ${c.yellow}--quick${c.reset}              Quick Flow track (bug fixes)
+  ${c.yellow}--standard${c.reset}           Standard track (features)
+  ${c.yellow}--enterprise${c.reset}         Enterprise track (platforms)
+
+${c.bold}Examples:${c.reset}
+  ${c.dim}# Interactive installation${c.reset}
+  npx claude-craft install
+
+  ${c.dim}# Install Symfony rules in French${c.reset}
+  npx claude-craft install ~/my-project --tech=symfony --lang=fr
+
+  ${c.dim}# Initialize workflow${c.reset}
+  npx claude-craft init --standard
+
+  ${c.dim}# Flatten codebase for context${c.reset}
+  npx claude-craft flatten --output=context.md
+
+${c.bold}Technologies:${c.reset}
+${Object.entries(TECHNOLOGIES).map(([key, val]) => `  ${c.cyan}${key.padEnd(12)}${c.reset} ${val.desc}`).join('\n')}
+
+${c.bold}Languages:${c.reset}
+${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - ${val}`).join('\n')}
+`);
+  }
+
+  // Detect project characteristics
+  detectProject(targetPath) {
+    const detected = {
+      hasClaude: false,
+      hasGit: false,
+      hasPackageJson: false,
+      hasComposer: false,
+      hasPubspec: false,
+      hasRequirements: false,
+      hasDockerfile: false,
+      suggestedTechs: [],
+      complexity: 'standard',
+    };
+
+    try {
+      // Check for .claude directory
+      detected.hasClaude = fs.existsSync(path.join(targetPath, '.claude'));
+
+      // Check for git
+      detected.hasGit = fs.existsSync(path.join(targetPath, '.git'));
+
+      // Detect technologies
+      if (fs.existsSync(path.join(targetPath, 'composer.json'))) {
+        detected.hasComposer = true;
+        detected.suggestedTechs.push('symfony');
+      }
+
+      if (fs.existsSync(path.join(targetPath, 'pubspec.yaml'))) {
+        detected.hasPubspec = true;
+        detected.suggestedTechs.push('flutter');
+      }
+
+      if (fs.existsSync(path.join(targetPath, 'package.json'))) {
+        detected.hasPackageJson = true;
+        const pkg = JSON.parse(fs.readFileSync(path.join(targetPath, 'package.json'), 'utf8'));
+        if (pkg.dependencies?.react || pkg.devDependencies?.react) {
+          if (pkg.dependencies?.['react-native'] || pkg.devDependencies?.['react-native']) {
+            detected.suggestedTechs.push('reactnative');
+          } else {
+            detected.suggestedTechs.push('react');
+          }
+        }
+      }
+
+      if (fs.existsSync(path.join(targetPath, 'requirements.txt')) ||
+          fs.existsSync(path.join(targetPath, 'pyproject.toml'))) {
+        detected.hasRequirements = true;
+        detected.suggestedTechs.push('python');
+      }
+
+      if (fs.existsSync(path.join(targetPath, 'Dockerfile')) ||
+          fs.existsSync(path.join(targetPath, 'docker-compose.yml'))) {
+        detected.hasDockerfile = true;
+        detected.suggestedTechs.push('docker');
+      }
+
+      // Estimate complexity
+      if (detected.suggestedTechs.length > 2) {
+        detected.complexity = 'enterprise';
+      } else if (detected.suggestedTechs.length === 0) {
+        detected.complexity = 'quick';
+      }
+
+    } catch (e) {
+      // Ignore detection errors
+    }
+
+    return detected;
+  }
+
+  // Interactive installation wizard
+  async interactiveInstall() {
+    this.createReadline();
+    this.printBanner();
+
+    console.log(`${c.bold}Welcome to Claude-Craft Interactive Installer${c.reset}\n`);
+
+    try {
+      // Step 1: Target path
+      console.log(`${c.cyan}[1/5]${c.reset} ${c.bold}Target Directory${c.reset}`);
+      const defaultPath = process.cwd();
+      const targetInput = await this.prompt(`  Enter path (${c.dim}${defaultPath}${c.reset}): `);
+      this.config.targetPath = targetInput || defaultPath;
+
+      // Resolve and validate path
+      this.config.targetPath = path.resolve(this.config.targetPath);
+      if (!fs.existsSync(this.config.targetPath)) {
+        console.log(`  ${c.yellow}Directory doesn't exist. Create it? (y/n)${c.reset}`);
+        const create = await this.prompt('  ');
+        if (create.toLowerCase() === 'y') {
+          fs.mkdirSync(this.config.targetPath, { recursive: true });
+          console.log(`  ${c.green}Created: ${this.config.targetPath}${c.reset}`);
+        } else {
+          console.log(`  ${c.red}Aborted.${c.reset}`);
+          this.closeReadline();
+          return;
+        }
+      }
+
+      // Detect project
+      console.log(`\n  ${c.dim}Analyzing project...${c.reset}`);
+      const detected = this.detectProject(this.config.targetPath);
+
+      if (detected.suggestedTechs.length > 0) {
+        console.log(`  ${c.green}Detected:${c.reset} ${detected.suggestedTechs.join(', ')}`);
+      }
+      if (detected.hasClaude) {
+        console.log(`  ${c.yellow}Existing .claude/ found - will update${c.reset}`);
+      }
+
+      // Step 2: Language
+      console.log(`\n${c.cyan}[2/5]${c.reset} ${c.bold}Language${c.reset}`);
+      console.log(`  ${Object.entries(LANGUAGES).map(([k, v], i) => `${i + 1}) ${k} - ${v}`).join('\n  ')}`);
+      const langInput = await this.prompt(`  Select (1-5, default: 1): `);
+      const langKeys = Object.keys(LANGUAGES);
+      const langIndex = parseInt(langInput) - 1;
+      this.config.language = langKeys[langIndex] || 'en';
+      console.log(`  ${c.green}Selected: ${LANGUAGES[this.config.language]}${c.reset}`);
+
+      // Step 3: Technologies
+      console.log(`\n${c.cyan}[3/5]${c.reset} ${c.bold}Technologies${c.reset}`);
+      console.log(`  ${Object.entries(TECHNOLOGIES).map(([k, v], i) => `${i + 1}) ${k.padEnd(12)} - ${v.desc}`).join('\n  ')}`);
+      console.log(`  ${c.dim}Enter numbers separated by spaces (e.g., "1 2" for Symfony + Flutter)${c.reset}`);
+
+      // Pre-select detected technologies
+      const techKeys = Object.keys(TECHNOLOGIES);
+      const preSelected = detected.suggestedTechs.map(t => techKeys.indexOf(t) + 1).filter(i => i > 0);
+      const defaultTechs = preSelected.length > 0 ? preSelected.join(' ') : '1';
+
+      const techInput = await this.prompt(`  Select (default: ${defaultTechs}): `);
+      const techIndices = (techInput || defaultTechs).split(/\s+/).map(n => parseInt(n) - 1);
+      this.config.technologies = techIndices.filter(i => i >= 0 && i < techKeys.length).map(i => techKeys[i]);
+      console.log(`  ${c.green}Selected: ${this.config.technologies.join(', ') || 'common only'}${c.reset}`);
+
+      // Step 4: Additional options
+      console.log(`\n${c.cyan}[4/5]${c.reset} ${c.bold}Additional Components${c.reset}`);
+
+      const infraInput = await this.prompt(`  Include Docker/Infrastructure rules? (y/N): `);
+      this.config.includeInfra = infraInput.toLowerCase() === 'y';
+
+      const projectInput = await this.prompt(`  Include Project Management commands? (Y/n): `);
+      this.config.includeProject = projectInput.toLowerCase() !== 'n';
+
+      // Step 5: Confirm
+      console.log(`\n${c.cyan}[5/5]${c.reset} ${c.bold}Confirmation${c.reset}`);
+      console.log(`
+  ${c.bold}Installation Summary:${c.reset}
+  ─────────────────────────────────────────
+  Target:       ${c.cyan}${this.config.targetPath}${c.reset}
+  Language:     ${c.cyan}${LANGUAGES[this.config.language]}${c.reset}
+  Technologies: ${c.cyan}${this.config.technologies.length > 0 ? this.config.technologies.join(', ') : 'Common only'}${c.reset}
+  Docker/Infra: ${c.cyan}${this.config.includeInfra ? 'Yes' : 'No'}${c.reset}
+  Project Mgmt: ${c.cyan}${this.config.includeProject ? 'Yes' : 'No'}${c.reset}
+  ─────────────────────────────────────────
+`);
+
+      const confirm = await this.prompt(`  Proceed with installation? (Y/n): `);
+      if (confirm.toLowerCase() === 'n') {
+        console.log(`  ${c.yellow}Installation cancelled.${c.reset}`);
+        this.closeReadline();
+        return;
+      }
+
+      this.closeReadline();
+
+      // Run installation
+      await this.runInstallation();
+
+    } catch (error) {
+      console.error(`${c.red}Error: ${error.message}${c.reset}`);
+      this.closeReadline();
+      process.exit(1);
+    }
+  }
+
+  // Run installation scripts
+  async runInstallation() {
+    console.log(`\n${c.bold}Installing Claude-Craft...${c.reset}\n`);
+
+    const scriptsDir = path.join(CLI_ROOT, 'Dev', 'scripts');
+    const langArg = `--lang=${this.config.language}`;
+    const forceArg = '--force';
+
+    try {
+      // Always install common rules
+      console.log(`${c.cyan}[1/${this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0)}]${c.reset} Installing common rules...`);
+      this.runScript(path.join(scriptsDir, 'install-common-rules.sh'), [langArg, this.config.targetPath]);
+
+      // Install technology-specific rules
+      let step = 2;
+      for (const tech of this.config.technologies) {
+        if (tech === 'docker') continue; // Handled by infra
+        const scriptName = `install-${tech}-rules.sh`;
+        const scriptPath = path.join(scriptsDir, scriptName);
+        if (fs.existsSync(scriptPath)) {
+          console.log(`${c.cyan}[${step}/${this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0)}]${c.reset} Installing ${tech} rules...`);
+          this.runScript(scriptPath, [langArg, this.config.targetPath]);
+          step++;
+        }
+      }
+
+      // Install infrastructure rules
+      if (this.config.includeInfra || this.config.technologies.includes('docker')) {
+        console.log(`${c.cyan}[${step}/${this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0)}]${c.reset} Installing infrastructure rules...`);
+        const infraScript = path.join(CLI_ROOT, 'Infra', 'install-infra-rules.sh');
+        if (fs.existsSync(infraScript)) {
+          this.runScript(infraScript, [langArg, this.config.targetPath]);
+        }
+        step++;
+      }
+
+      // Install project commands
+      if (this.config.includeProject) {
+        console.log(`${c.cyan}[${step}/${this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0)}]${c.reset} Installing project commands...`);
+        const projectScript = path.join(CLI_ROOT, 'Project', 'install-project-commands.sh');
+        if (fs.existsSync(projectScript)) {
+          this.runScript(projectScript, [langArg, this.config.targetPath]);
+        }
+      }
+
+      this.printSuccess();
+
+    } catch (error) {
+      console.error(`${c.red}Installation failed: ${error.message}${c.reset}`);
+      process.exit(1);
+    }
+  }
+
+  // Run a shell script
+  runScript(scriptPath, args) {
+    try {
+      execSync(`bash "${scriptPath}" ${args.join(' ')}`, {
+        stdio: 'inherit',
+        cwd: CLI_ROOT,
+      });
+    } catch (error) {
+      throw new Error(`Script failed: ${scriptPath}`);
+    }
+  }
+
+  // Print success message
+  printSuccess() {
+    console.log(`
+${c.green}${c.bold}╔═══════════════════════════════════════════════════════════════╗${c.reset}
+${c.green}${c.bold}║${c.reset}                                                               ${c.green}${c.bold}║${c.reset}
+${c.green}${c.bold}║${c.reset}   ${c.green}${c.bold}Installation Complete!${c.reset}                                    ${c.green}${c.bold}║${c.reset}
+${c.green}${c.bold}║${c.reset}                                                               ${c.green}${c.bold}║${c.reset}
+${c.green}${c.bold}╚═══════════════════════════════════════════════════════════════╝${c.reset}
+
+${c.bold}Next Steps:${c.reset}
+
+  1. ${c.cyan}cd ${this.config.targetPath}${c.reset}
+
+  2. Start Claude Code and try the workflow:
+     ${c.cyan}/workflow:init${c.reset}
+
+  3. Or use technology-specific commands:
+     ${c.cyan}/symfony:check-architecture${c.reset}
+     ${c.cyan}/flutter:check-compliance${c.reset}
+     ${c.cyan}/react:generate-component${c.reset}
+
+${c.bold}Documentation:${c.reset}
+  ${c.dim}https://github.com/TheBeardedBearSAS/claude-craft${c.reset}
+
+`);
+  }
+
+  // Parse CLI arguments
+  parseArgs(args) {
+    const parsed = {
+      command: null,
+      path: null,
+      options: {},
+    };
+
+    for (const arg of args) {
+      if (arg.startsWith('--')) {
+        const [key, value] = arg.slice(2).split('=');
+        parsed.options[key] = value ?? true;
+      } else if (!parsed.command) {
+        parsed.command = arg;
+      } else if (!parsed.path) {
+        parsed.path = arg;
+      }
+    }
+
+    return parsed;
+  }
+
+  // Main entry point
+  async run() {
+    const args = process.argv.slice(2);
+    const { command, path: targetPath, options } = this.parseArgs(args);
+
+    // Apply options
+    if (options.lang) this.config.language = options.lang;
+    if (options.tech) this.config.technologies = [options.tech];
+    if (targetPath) this.config.targetPath = path.resolve(targetPath);
+
+    switch (command) {
+      case 'install':
+        if (targetPath && options.tech) {
+          // Non-interactive install
+          await this.runInstallation();
+        } else {
+          // Interactive install
+          await this.interactiveInstall();
+        }
+        break;
+
+      case 'init':
+        this.printBanner();
+        console.log(`${c.cyan}Workflow initialization is available after installation.${c.reset}`);
+        console.log(`Run ${c.bold}/workflow:init${c.reset} in Claude Code.\n`);
+        break;
+
+      case 'flatten':
+        await this.flattenCodebase(options);
+        break;
+
+      case 'help':
+      case '--help':
+      case '-h':
+        this.printBanner();
+        this.printHelp();
+        break;
+
+      default:
+        if (!command) {
+          // No command - run interactive install
+          await this.interactiveInstall();
+        } else {
+          console.log(`${c.red}Unknown command: ${command}${c.reset}`);
+          this.printHelp();
+          process.exit(1);
+        }
+    }
+  }
+
+  // Flatten codebase for context
+  async flattenCodebase(options) {
+    this.printBanner();
+    console.log(`${c.bold}Codebase Flattener${c.reset}\n`);
+    console.log(`${c.dim}Generating context-optimized summary of your codebase...${c.reset}\n`);
+
+    const targetPath = this.config.targetPath;
+    const outputFile = options.output || 'CODEBASE_CONTEXT.md';
+
+    // Import flattener module
+    const flattener = require('./flattener');
+    await flattener.flatten(targetPath, outputFile, options);
+  }
+}
+
+// Run CLI
+const cli = new ClaudeCraftCLI();
+cli.run().catch(error => {
+  console.error(`${colors.red}Error: ${error.message}${colors.reset}`);
+  process.exit(1);
+});
