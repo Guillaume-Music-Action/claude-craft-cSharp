@@ -4,6 +4,10 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## What's New in v3.0
 
+- **Workflow Methodology**: BMAD-inspired 4-phase development (Analysis → Planning → Design → Implementation)
+- **Workflow Orchestrator**: Intelligent routing to appropriate agents and tracks
+- **PRD/Tech Spec Generation**: Automated documentation from project context
+- **3 Development Tracks**: Quick Flow, Standard, Enterprise - adapted to complexity
 - **Hooks System**: Automated quality gates, linting, and notifications
 - **MCP Integration**: Context7 for up-to-date library documentation
 - **Migration Tool**: Upgrade existing projects to v3.0
@@ -15,7 +19,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **5 Technology Stacks**: Symfony, Flutter, Python, React, React Native
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **23 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, and Docker experts
+- **24 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, and Workflow Orchestrator
 - **90+ Slash Commands**: Automated workflows and code generation
 - **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
 - **30 Templates**: Code generation patterns
@@ -25,6 +29,53 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Auto-generated CLAUDE.md**: Project configuration file created at installation
 - **Multi-Account Manager**: Manage multiple Claude Code accounts easily
 - **Custom Status Line**: Rich status bar with profile, model, git, context %
+
+## Workflow Methodology
+
+Claude-Craft includes a BMAD-inspired workflow system that adapts to your project complexity.
+
+### Development Tracks
+
+| Track | Setup Time | Phases | Best For |
+|-------|------------|--------|----------|
+| **Quick Flow** | < 5 min | Implementation only | Bug fixes, hotfixes, small tweaks |
+| **Standard** | < 15 min | Plan → Design → Implement | New features, refactoring |
+| **Enterprise** | < 30 min | Analyze → Plan → Design → Implement | Platforms, migrations, multi-team |
+
+### Getting Started with Workflows
+
+```bash
+# Initialize workflow - auto-detects complexity
+/workflow:init
+
+# Or specify track
+/workflow:init --quick      # Bug fix mode
+/workflow:init --enterprise # Full methodology
+
+# Check progress
+/workflow:status
+```
+
+### Workflow Commands
+
+| Command | Phase | Purpose |
+|---------|-------|---------|
+| `/workflow:init` | Setup | Analyze project, recommend track |
+| `/workflow:analyze` | Analysis | Research and exploration (Enterprise) |
+| `/workflow:plan` | Planning | Generate PRD, personas, backlog |
+| `/workflow:design` | Design | Tech spec, architecture, ADRs |
+| `/workflow:implement` | Implementation | Sprint development with TDD/BDD |
+| `/workflow:status` | Any | Show current progress |
+
+### Document Generation
+
+```bash
+# Generate Product Requirements Document
+/project:generate-prd
+
+# Generate Technical Specification
+/project:generate-tech-spec
+```
 
 ## Quick Start
 
@@ -197,6 +248,11 @@ make config-install PROJECT=my-monorepo
 
 ## Available Agents
 
+### Workflow Agent
+| Agent | Expertise |
+|-------|-----------|
+| `workflow-orchestrator` | Intelligent routing, phase coordination, track selection |
+
 ### Common Agents
 | Agent | Expertise |
 |-------|-----------|
@@ -236,6 +292,8 @@ make config-install PROJECT=my-monorepo
 
 ## Command Namespaces
 
+- `/workflow:` - Development workflow (init, analyze, plan, design, implement, status)
+- `/project:` - Project management (backlog, PRD, tech-spec, sprints)
 - `/common:` - Transversal commands (audit, changelog, CI/CD)
 - `/symfony:` - Symfony-specific (CRUD, migrations, Doctrine)
 - `/flutter:` - Flutter-specific (widgets, BLoC, performance)
