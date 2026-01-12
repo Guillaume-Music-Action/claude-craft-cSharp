@@ -318,4 +318,4 @@ No "Backend only", "Frontend only", or "Mobile only" User Stories allowed.
 
 ---
 
-[&larr; Troubleshooting](06-troubleshooting.md) | [Back to Index](../index.md)
+[&larr; Troubleshooting](06-troubleshooting.md) | [Next: Setup New Project &rarr;](08-setup-new-project.md)

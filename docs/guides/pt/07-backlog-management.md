@@ -197,4 +197,4 @@ UI → API → Logica de Negocio → Banco de Dados
 
 ---
 
-[&larr; Resolucao de Problemas](06-troubleshooting.md) | [Voltar ao Indice](../index.md)
+[&larr; Resolucao de Problemas](06-troubleshooting.md) | [Proximo: Configurar Novo Projeto &rarr;](08-setup-new-project.md)

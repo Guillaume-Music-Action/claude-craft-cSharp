@@ -318,4 +318,4 @@ Pas de User Stories "Backend uniquement", "Frontend uniquement" ou "Mobile uniqu
 
 ---
 
-[&larr; Resolution de Problemes](06-troubleshooting.md) | [Retour a l'Index](../index.md)
+[&larr; Resolution de Problemes](06-troubleshooting.md) | [Suivant : Installation Nouveau Projet &rarr;](08-setup-new-project.md)

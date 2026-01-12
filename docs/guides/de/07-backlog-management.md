@@ -197,4 +197,4 @@ UI → API → Geschaftslogik → Datenbank
 
 ---
 
-[&larr; Fehlerbehebung](06-troubleshooting.md) | [Zuruck zum Index](../index.md)
+[&larr; Fehlerbehebung](06-troubleshooting.md) | [Nachste: Neues Projekt Einrichten &rarr;](08-setup-new-project.md)
