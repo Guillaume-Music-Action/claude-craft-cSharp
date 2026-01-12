@@ -148,7 +148,7 @@ jobs:
     name: Publish to NPM
     runs-on: ubuntu-latest
     needs: [validate, build]
-    # environment: npm  # Temporarily disabled for debugging
+    environment: npm
     permissions:
       contents: read
       id-token: write
@@ -161,26 +161,6 @@ jobs:
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Debug OIDC environment
-        run: |
-          echo "============================================="
-          echo "npm Trusted Publisher configuration must match:"
-          echo "============================================="
-          echo "Owner:             TheBeardedBearSAS"
-          echo "Repository:        claude-craft"
-          echo "Workflow filename: npm-publish.yml"
-          echo "Environment:       (none - testing without environment)"
-          echo "============================================="
-          echo ""
-          echo "GitHub context:"
-          echo "  repository: ${{ github.repository }}"
-          echo "  repository_owner: ${{ github.repository_owner }}"
-          echo "  workflow: ${{ github.workflow }}"
-          echo "  job_workflow_ref: ${{ github.job_workflow_ref }}"
-          echo "  environment: npm"
-          echo ""
-          echo "npm version: $(npm --version)"
 
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}
@@ -208,12 +188,14 @@ jobs:
           echo "  Version: ${{ needs.validate.outputs.version }}"
           echo "  Tag: ${{ steps.npm_tag.outputs.tag }}"
           npm publish --dry-run --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish to NPM (OIDC)
+      - name: Publish to NPM
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
-        run: |
-          unset NODE_AUTH_TOKEN
-          npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
+        run: npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Verify publication
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
