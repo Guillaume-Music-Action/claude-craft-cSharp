@@ -148,7 +148,7 @@ jobs:
     name: Publish to NPM
     runs-on: ubuntu-latest
     needs: [validate, build]
-    environment: npm
+    # environment: npm  # Temporarily disabled for debugging
     permissions:
       contents: read
       id-token: write
@@ -170,7 +170,7 @@ jobs:
           echo "Owner:             TheBeardedBearSAS"
           echo "Repository:        claude-craft"
           echo "Workflow filename: npm-publish.yml"
-          echo "Environment:       npm"
+          echo "Environment:       (none - testing without environment)"
           echo "============================================="
           echo ""
           echo "GitHub context:"
