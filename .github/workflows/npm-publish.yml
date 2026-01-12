@@ -160,10 +160,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
-      - name: Configure npm for OIDC
+      - name: Debug OIDC environment
         run: |
-          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
+          echo "ACTIONS_ID_TOKEN_REQUEST_URL: ${ACTIONS_ID_TOKEN_REQUEST_URL:-not set}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Environment: npm"
+          echo "npm version: $(npm --version)"
+          cat ~/.npmrc 2>/dev/null || echo "No .npmrc found"
 
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}
