@@ -160,7 +160,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          # No registry-url - let npm use OIDC automatically
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}
@@ -187,14 +187,12 @@ jobs:
           echo "DRY RUN - Would publish with:"
           echo "  Version: ${{ needs.validate.outputs.version }}"
           echo "  Tag: ${{ steps.npm_tag.outputs.tag }}"
-          npm publish --dry-run --tag ${{ steps.npm_tag.outputs.tag }}
-        # OIDC: No NODE_AUTH_TOKEN needed - authentication via id-token
+          npm publish --dry-run --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
 
       - name: Publish to NPM (OIDC)
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         run: |
-          npm publish --access public --tag ${{ steps.npm_tag.outputs.tag }}
-        # OIDC: Provenance is automatic, no token needed
+          npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
 
       - name: Verify publication
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
