@@ -164,12 +164,23 @@ jobs:
 
       - name: Debug OIDC environment
         run: |
-          echo "ACTIONS_ID_TOKEN_REQUEST_URL: ${ACTIONS_ID_TOKEN_REQUEST_URL:-not set}"
-          echo "Repository: ${{ github.repository }}"
-          echo "Workflow: ${{ github.workflow }}"
-          echo "Environment: npm"
+          echo "============================================="
+          echo "npm Trusted Publisher configuration must match:"
+          echo "============================================="
+          echo "Owner:             TheBeardedBearSAS"
+          echo "Repository:        claude-craft"
+          echo "Workflow filename: npm-publish.yml"
+          echo "Environment:       npm"
+          echo "============================================="
+          echo ""
+          echo "GitHub context:"
+          echo "  repository: ${{ github.repository }}"
+          echo "  repository_owner: ${{ github.repository_owner }}"
+          echo "  workflow: ${{ github.workflow }}"
+          echo "  job_workflow_ref: ${{ github.job_workflow_ref }}"
+          echo "  environment: npm"
+          echo ""
           echo "npm version: $(npm --version)"
-          cat ~/.npmrc 2>/dev/null || echo "No .npmrc found"
 
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}
