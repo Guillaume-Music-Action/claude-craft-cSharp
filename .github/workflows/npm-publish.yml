@@ -160,7 +160,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+
+      - name: Configure npm for OIDC
+        run: |
+          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
 
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}
