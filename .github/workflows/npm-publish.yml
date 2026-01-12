@@ -201,6 +201,7 @@ jobs:
       - name: Publish to NPM (OIDC)
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         run: |
+          unset NODE_AUTH_TOKEN
           npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
 
       - name: Verify publication
