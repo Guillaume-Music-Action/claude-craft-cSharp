@@ -179,7 +179,7 @@ jobs:
           fi
 
       - name: Publish (dry run)
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == 'true' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == true }}
         run: |
           echo "DRY RUN - Would publish with:"
           echo "  Version: ${{ needs.validate.outputs.version }}"
@@ -188,13 +188,13 @@ jobs:
         # OIDC: No NODE_AUTH_TOKEN needed - authentication via id-token
 
       - name: Publish to NPM (OIDC)
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != 'true' }}
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         run: |
           npm publish --access public --tag ${{ steps.npm_tag.outputs.tag }}
         # OIDC: Provenance is automatic, no token needed
 
       - name: Verify publication
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != 'true' }}
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         run: |
           sleep 10
           NPM_TAG="${{ steps.npm_tag.outputs.tag }}"
@@ -209,7 +209,7 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     needs: [validate, publish]
-    if: ${{ github.ref_type == 'tag' && (github.event_name != 'workflow_dispatch' || inputs.dry_run != 'true') }}
+    if: ${{ github.ref_type == 'tag' && (github.event_name != 'workflow_dispatch' || inputs.dry_run != true) }}
     permissions:
       contents: write
     steps:
