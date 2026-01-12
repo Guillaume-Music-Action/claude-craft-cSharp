@@ -12,7 +12,7 @@ on:
       dry_run:
         description: 'Dry run (do not actually publish)'
         required: false
-        default: 'false'
+        default: false
         type: boolean
       npm_tag:
         description: 'NPM tag (latest, beta, next)'
