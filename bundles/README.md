@@ -67,10 +67,10 @@ To create technology-specific bundles:
 
 ```bash
 # Generate bundle for specific tech
-npx claude-craft bundle --tech=symfony --platform=chatgpt
+npx @the-bearded-bear/claude-craft bundle --tech=symfony --platform=chatgpt
 
 # Generate bundle in specific language
-npx claude-craft bundle --lang=fr --platform=claude
+npx @the-bearded-bear/claude-craft bundle --lang=fr --platform=claude
 ```
 
 ## Updating Bundles
@@ -79,7 +79,7 @@ When Claude-Craft is updated, regenerate bundles:
 
 ```bash
 cd claude-craft
-npx claude-craft bundle --all
+npx @the-bearded-bear/claude-craft bundle --all
 ```
 
 ## Token Considerations

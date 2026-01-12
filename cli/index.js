@@ -4,7 +4,7 @@
  * Claude-Craft CLI
  * Interactive installer for Claude Code rules, agents, and commands
  *
- * Usage: npx claude-craft [command] [options]
+ * Usage: npx @the-bearded-bear/claude-craft [command] [options]
  */
 
 const readline = require('readline');
@@ -127,7 +127,7 @@ ${c.cyan}${c.bold}╚═══════════════════�
   // Print help
   printHelp() {
     console.log(`
-${c.bold}Usage:${c.reset} npx claude-craft [command] [options]
+${c.bold}Usage:${c.reset} npx @the-bearded-bear/claude-craft [command] [options]
 
 ${c.bold}Commands:${c.reset}
   ${c.green}install${c.reset}              Interactive installation wizard
@@ -146,16 +146,16 @@ ${c.bold}Options:${c.reset}
 
 ${c.bold}Examples:${c.reset}
   ${c.dim}# Interactive installation${c.reset}
-  npx claude-craft install
+  npx @the-bearded-bear/claude-craft install
 
   ${c.dim}# Install Symfony rules in French${c.reset}
-  npx claude-craft install ~/my-project --tech=symfony --lang=fr
+  npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=fr
 
   ${c.dim}# Initialize workflow${c.reset}
-  npx claude-craft init --standard
+  npx @the-bearded-bear/claude-craft init --standard
 
   ${c.dim}# Flatten codebase for context${c.reset}
-  npx claude-craft flatten --output=context.md
+  npx @the-bearded-bear/claude-craft flatten --output=context.md
 
 ${c.bold}Technologies:${c.reset}
 ${Object.entries(TECHNOLOGIES).map(([key, val]) => `  ${c.cyan}${key.padEnd(12)}${c.reset} ${val.desc}`).join('\n')}

@@ -8,7 +8,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Workflow Orchestrator**: Intelligent routing to appropriate agents and tracks
 - **PRD/Tech Spec Generation**: Automated documentation from project context
 - **3 Development Tracks**: Quick Flow, Standard, Enterprise - adapted to complexity
-- **NPX Interactive CLI**: Install with `npx claude-craft` - interactive wizard
+- **NPX Interactive CLI**: Install with `npx @the-bearded-bear/claude-craft` - interactive wizard
 - **Codebase Flattener**: Generate context-optimized codebase summary for AI
 - **Document Sharding**: Automatic splitting for large codebases (90% token savings)
 - **Web Bundles**: Pre-built instructions for ChatGPT, Claude Projects, Gemini Gems
@@ -87,10 +87,10 @@ Claude-Craft includes a BMAD-inspired workflow system that adapts to your projec
 
 ```bash
 # Interactive installation wizard
-npx claude-craft
+npx @the-bearded-bear/claude-craft
 
 # Or install to specific directory
-npx claude-craft install ~/my-project --tech=symfony --lang=fr
+npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=fr
 ```
 
 ### Method 2: Clone Repository
@@ -169,7 +169,7 @@ claude-craft/
 │   ├── StatusLine/             # Custom status line
 │   ├── ProjectConfig/          # YAML project manager
 │   └── PluginExport/           # Export as Claude Code plugins
-├── cli/                        # NPX CLI (npx claude-craft)
+├── cli/                        # NPX CLI (npx @the-bearded-bear/claude-craft)
 │   ├── index.js                # Interactive installer
 │   └── flattener.js            # Codebase flattener
 └── bundles/                    # Web platform bundles
@@ -275,13 +275,13 @@ Generate a context-optimized summary of your codebase for AI assistants:
 
 ```bash
 # Generate flattened context
-npx claude-craft flatten
+npx @the-bearded-bear/claude-craft flatten
 
 # With custom output file
-npx claude-craft flatten --output=CONTEXT.md
+npx @the-bearded-bear/claude-craft flatten --output=CONTEXT.md
 
 # For large codebases (automatic sharding)
-npx claude-craft flatten --max-tokens=50000
+npx @the-bearded-bear/claude-craft flatten --max-tokens=50000
 ```
 
 Features:
