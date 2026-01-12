@@ -1,0 +1,45 @@
+# Source control
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+
+# Documentation (not needed for package consumers)
+docs/
+*.md
+!README.md
+
+# Development files
+Makefile
+claude-projects.yaml
+claude-projects.yaml.example
+bundles/
+
+# Local configuration
+.claude/
+.vscode/
+.idea/
+
+# Editor files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Test files
+__tests__/
+*.test.js
+*.spec.js
+coverage/
+.nyc_output/
+
+# Build artifacts
+node_modules/
+*.log
+*.tgz
+
+# Plans and temporary files
+plans/
